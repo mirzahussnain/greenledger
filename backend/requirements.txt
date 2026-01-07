@@ -1,0 +1,21 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+alembic
+psycopg2-binary
+
+# Environment
+python-dotenv
+
+# Image Processing & AI
+pytesseract
+python-multipart
+Pillow
+numpy
+
+# Testing
+pytest
+httpx
