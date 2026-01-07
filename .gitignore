@@ -1,0 +1,25 @@
+# Python internals
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment (Crucial!)
+venv/
+venv-greenledger/
+.env
+
+# Environment Variables (Security Risk if committed)
+.env
+.env.local
+
+# Database
+*.sqlite3
+*.db
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
