@@ -1,4 +1,5 @@
 "use client";
+import CarbonChart from "@/components/CarbonChart";
 import BillList from "@/components/RecentBills";
 import UploadCard from "@/components/UploadCard";
 import { useState } from "react";
@@ -28,6 +29,9 @@ export default function Home() {
         {/* We pass the "onSuccess" function down to the card */}
         <UploadCard onSuccess={handleUploadSuccess} />
       </div>
+
+      {/* Insert Chart Here - It passes the refreshKey so it updates automatically */}
+      <CarbonChart refreshTrigger={refreshKey} />
 
       {/* Data Section */}
       <BillList refreshTrigger={refreshKey} />
