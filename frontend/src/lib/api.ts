@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export interface Bill {
+  id: number;
+  file_name: string;
+  extracted_kwh: number;
+  upload_date: string;
+}
 // Create a configured instance of Axios
 export const api = axios.create({
   // This points to your Python Backend
@@ -20,5 +26,10 @@ export const uploadBill = async (file: File) => {
       "Content-Type": "multipart/form-data",
     },
   });
+  return response.data;
+};
+
+export const getBills = async (): Promise<Bill[]> => {
+  const response = await api.get("/bills");
   return response.data;
 };
