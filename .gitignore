@@ -1,3 +1,5 @@
+# Zed environment
+.zed/
 # Python internals
 __pycache__/
 *.py[cod]

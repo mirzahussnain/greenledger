@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api.upload import router as upload_router
 app = FastAPI(
     title="GreenLedger API",
     description="Backend for SME Carbon Testing",
@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(upload_router,prefix="/api/v1")
 
 @app.get("/")
 def health_check():
