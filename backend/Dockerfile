@@ -21,4 +21,3 @@ COPY . .
 # 6. Command to run the app
 # Note: We use port 10000 to match Render's default expectation
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
-```
