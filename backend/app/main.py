@@ -1,5 +1,10 @@
+import os
+from multiprocessing import process
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from tomllib import load
 
 from app.api.fetch import router as bill_router
 from app.api.upload import router as upload_router
@@ -9,12 +14,24 @@ app = FastAPI(
     description="Backend for SME Carbon Testing",
     version="0.1.0",
 )
+load_dotenv()
 
 # CORS (Cross-Origin Resouce Sharii)
+env_origins = os.getenv("ALLOWED_ORIGINS")
 
+if env_origins:
+    # Render provides: "https://myapp.vercel.app,http://localhost:3000"
+    origins = env_origins.split(",")
+else:
+    # Fallback defaults
+    origins = [
+        "http://localhost:3000",
+        "https://greenledger-puce.vercel.app",
+        "https://greenledger.vercel.app",
+    ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
