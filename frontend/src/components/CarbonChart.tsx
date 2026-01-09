@@ -16,11 +16,13 @@ import { getBills, Bill } from "../lib/api";
 import { useAuth } from "@clerk/nextjs";
 
 const CarbonChart = ({ refreshTrigger }: { refreshTrigger: number }) => {
-  const { getToken } = useAuth();
+  const { getToken, isLoaded, userId } = useAuth();
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const loadData = async () => {
       try {
+        // 1. Guard Clause: Wait for Auth
+        if (!isLoaded || !userId) return;
         const token = await getToken();
         if (!token) return;
         const bills = await getBills(token);
@@ -48,7 +50,7 @@ const CarbonChart = ({ refreshTrigger }: { refreshTrigger: number }) => {
       }
     };
     loadData();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, isLoaded, userId, getToken]);
 
   if (data.length === 0) return <div>No data available</div>;
 

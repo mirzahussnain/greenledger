@@ -6,13 +6,15 @@ import { FileText, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const BillList = ({ refreshTrigger }: { refreshTrigger: number }) => {
-  const { getToken } = useAuth();
+  const { getToken, isLoaded, userId } = useAuth();
   const [bills, setBills] = useState<Bill[]>([]);
 
   // Fetch bills whenever "refreshTrigger" changes
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 1. Wait until Clerk is actually ready
+        if (!isLoaded || !userId) return;
         const token = await getToken();
         if (!token) return;
         const data = await getBills(token);
@@ -22,7 +24,7 @@ const BillList = ({ refreshTrigger }: { refreshTrigger: number }) => {
       }
     };
     fetchData();
-  }, [refreshTrigger, getToken]);
+  }, [refreshTrigger, getToken, isLoaded, userId]);
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-10">
