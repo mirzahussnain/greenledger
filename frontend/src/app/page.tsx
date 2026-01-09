@@ -2,6 +2,7 @@
 import CarbonChart from "@/components/CarbonChart";
 import BillList from "@/components/RecentBills";
 import UploadCard from "@/components/UploadCard";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { useState } from "react";
 
 export default function Home() {
@@ -13,28 +14,44 @@ export default function Home() {
     setRefreshKey((prev) => prev + 1);
   };
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-gray-50">
-      {/*Title Section */}
-      <div className="text-center mb-10 space-y-4">
-        <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-600">
-          GreenLedger 🌿
-        </h1>
-        <p className="text-lg to-gray-600 max-w-lg mx-auto">
-          AI-powered Carbon Tracking for UK Enterprises Upload your utility bill
-          to calculate footprint instantly.
-        </p>
-      </div>
-      {/* Upload Section */}
-      <div className="w-full max-w-md mb-8">
-        {/* We pass the "onSuccess" function down to the card */}
-        <UploadCard onSuccess={handleUploadSuccess} />
-      </div>
+    <>
+      {/* Shows Profile Pic if logged in, nothing if logged out */}
+      <SignedIn>
+        <UserButton afterSignOutUrl="/" />
+      </SignedIn>
 
-      {/* Insert Chart Here - It passes the refreshKey so it updates automatically */}
-      <CarbonChart refreshTrigger={refreshKey} />
+      {/* State 1: Logged Out (Landing Page) */}
+      <SignedOut>
+        <div className="text-center mt-20 space-y-6">
+          {/*<h2 className="text-4xl font-bold text-gray-800">
+            Automate your Net Zero Reporting
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Stop manually typing data from utility bills. Use our AI to extract
+            carbon data instantly.
+          </p>*/}
+          <div className="pt-6">
+            <SignInButton mode="modal">
+              <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+                Get Started (Sign In)
+              </button>
+            </SignInButton>
+          </div>
+        </div>
+      </SignedOut>
 
-      {/* Data Section */}
-      <BillList refreshTrigger={refreshKey} />
-    </main>
+      {/* State 2: Logged In (The Dashboard) */}
+      <SignedIn>
+        <div className="w-full max-w-4xl flex flex-col items-center gap-8">
+          <div className="w-full max-w-md">
+            <UploadCard onSuccess={handleUploadSuccess} />
+          </div>
+
+          <CarbonChart refreshTrigger={refreshKey} />
+
+          <BillList refreshTrigger={refreshKey} />
+        </div>
+      </SignedIn>
+    </>
   );
 }

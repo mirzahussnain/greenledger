@@ -1,10 +1,12 @@
 "use client";
 
 import { uploadBill } from "@/lib/api";
+import { useAuth } from "@clerk/nextjs";
 import { AlertCircle, CheckCircle, Loader2, UploadCloud } from "lucide-react";
 import { useState } from "react";
 
 const UploadCard = ({ onSuccess }: { onSuccess?: () => void }) => {
+  const { getToken } = useAuth();
   const [status, setStatus] = useState<
     "idle" | "uploading" | "success" | "error"
   >("idle");
@@ -21,8 +23,11 @@ const UploadCard = ({ onSuccess }: { onSuccess?: () => void }) => {
     setStatus("uploading");
 
     try {
+      const token = await getToken();
+      if (!token) throw new Error("No auth token");
+
       // 1. Call the Python Backend
-      const data = await uploadBill(file);
+      const data = await uploadBill(file, token);
 
       // 2. Update UI with the result (Mock or Real)
       // Note: Backend returns keys like "detected_kwh" or "extracted_kwh"

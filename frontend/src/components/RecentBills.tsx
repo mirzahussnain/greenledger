@@ -1,24 +1,28 @@
 "use client";
 
 import { Bill, getBills } from "@/lib/api";
+import { useAuth } from "@clerk/nextjs";
 import { FileText, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const BillList = ({ refreshTrigger }: { refreshTrigger: number }) => {
+  const { getToken } = useAuth();
   const [bills, setBills] = useState<Bill[]>([]);
 
   // Fetch bills whenever "refreshTrigger" changes
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getBills();
+        const token = await getToken();
+        if (!token) return;
+        const data = await getBills(token);
         setBills(data);
       } catch (error) {
         console.error("Error fetching bills:", error);
       }
     };
     fetchData();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, getToken]);
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-10">

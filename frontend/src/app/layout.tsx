@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +24,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-gray-50">
+            {/*Title Section */}
+            <div className="text-center mb-10 space-y-4">
+              <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-green-600 to-teal-600 py-3">
+                GreenLedger 🌿
+              </h1>
+              <p className="text-lg to-gray-600 max-w-lg mx-auto">
+                AI-powered Carbon Tracking for UK Enterprises Upload your
+                utility bill to calculate footprint instantly.
+              </p>
+            </div>
+            {children}
+          </main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

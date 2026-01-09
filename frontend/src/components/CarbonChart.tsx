@@ -13,13 +13,17 @@ import {
   AreaChart,
 } from "recharts";
 import { getBills, Bill } from "../lib/api";
+import { useAuth } from "@clerk/nextjs";
 
 const CarbonChart = ({ refreshTrigger }: { refreshTrigger: number }) => {
+  const { getToken } = useAuth();
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     const loadData = async () => {
       try {
-        const bills = await getBills();
+        const token = await getToken();
+        if (!token) return;
+        const bills = await getBills(token);
 
         // Transform data for the chart
         // 1. Sort by date (oldest to newest)

@@ -16,9 +16,9 @@ class BillStatus(str, enum.Enum):
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=True)
     company_name = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -28,9 +28,8 @@ class User(Base):
 
 class Bill(Base):
     __tablename__ = "bills"
-
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
     file_name = Column(String)
     extracted_kwh = Column(Float, nullable=True)  # Nullable because OCR might fail
     carbon_footprint_kg = Column(Float, nullable=True)
